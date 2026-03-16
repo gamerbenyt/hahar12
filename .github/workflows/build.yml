@@ -24,7 +24,7 @@ jobs:
 
       - name: Build EXE
         # Replace 'your_filename.py' with the actual name of your file
-        run: pyinstaller --onefile --noconsole --clean --hidden-import=requests --hidden-import=Crypto.Cipher.AES your_filename.py
+        run: pyinstaller --onefile --noconsole --clean --hidden-import=requests --hidden-import=Crypto.Cipher.AES Ayhu.py
 
       - name: Upload EXE
         uses: actions/upload-artifact@v4
